@@ -4,7 +4,7 @@
 Implementasi server dengan fitur tampilan tanggal dan waktu untuk pesan yang masuk.
 
 ## Fitur
-- **Auto IP Detection**: Client otomatis mendeteksi IP address-nya
+- **Auto IP Detection**: Client otomatis mendeteksi IP address menggunakan hostname resolution
 - **Dynamic Server Configuration**: IP dan port server dapat dikonfigurasi
 - **Date Display**: Server menampilkan tanggal saat startup (tidak berulang)
 - **Time Stamps**: Setiap pesan dari client ditampilkan dengan timestamp

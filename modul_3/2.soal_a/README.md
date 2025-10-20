@@ -20,7 +20,7 @@ Implementasi client-server dengan deteksi IP client otomatis.
    ```
 
 ## Keterangan
-- Client otomatis mendeteksi IP address menggunakan koneksi ke server eksternal
+- Client otomatis mendeteksi IP address menggunakan hostname resolution
 - Fallback ke 127.0.0.1 jika deteksi gagal
 - Server berjalan di IP: 127.0.0.1, Port: 12345
 - Komunikasi satu arah dari client ke server

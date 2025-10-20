@@ -1,7 +1,7 @@
-# Modul 3 - Socket Programming dengan Python
+# Modul 3 - TCP Socket Programming dengan Python
 
 ## Deskripsi
-Koleksi implementasi client-server socket communication menggunakan Python, dari contoh dasar hingga chat bidirectional dengan fitur lengkap.
+Koleksi implementasi client-server TCP socket communication menggunakan Python, dari contoh dasar hingga chat bidirectional dengan fitur lengkap.
 
 ## Struktur Folder
 

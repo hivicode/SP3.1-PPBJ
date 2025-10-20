@@ -4,7 +4,7 @@
 Implementasi client-server dengan konfigurasi IP dan port server yang dinamis.
 
 ## Fitur
-- **Auto IP Detection**: Client otomatis mendeteksi IP address-nya
+- **Auto IP Detection**: Client otomatis mendeteksi IP address menggunakan hostname resolution
 - **Dynamic Server IP**: User dapat memasukkan IP server secara manual
 - **Dynamic Server Port**: User dapat memasukkan port server secara manual
 - Koneksi fleksibel ke berbagai server

@@ -4,7 +4,7 @@
 Implementasi chat bidirectional antara client dan server dengan fitur timestamp lengkap.
 
 ## Fitur
-- **Auto IP Detection**: Client otomatis mendeteksi IP address-nya
+- **Auto IP Detection**: Client otomatis mendeteksi IP address menggunakan hostname resolution
 - **Dynamic Server Configuration**: IP dan port server dapat dikonfigurasi
 - **Date Display**: Server menampilkan tanggal saat startup (tidak berulang)
 - **Bidirectional Communication**: Server dan client dapat saling mengirim pesan
