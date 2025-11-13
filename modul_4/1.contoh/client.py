@@ -3,7 +3,7 @@ import threading
 
 userName = input("Masukkan username: ")
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(('127.0.0.1', 5001))
+client.connect(('192.168.1.2', 5001))
 
 def receive():
     while True:
