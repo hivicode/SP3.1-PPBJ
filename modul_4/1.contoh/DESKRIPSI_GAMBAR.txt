@@ -1,0 +1,51 @@
+DESKRIPSI APLIKASI CHAT MULTI-CLIENT
+=====================================
+
+Gambaran Umum
+-------------
+
+Gambar ini menampilkan aplikasi chat berbasis socket TCP dengan dukungan multi-client yang sedang berjalan dalam lingkungan Visual Studio Code. Aplikasi ini menunjukkan implementasi server yang dapat menangani beberapa client secara bersamaan, dimana setiap client dapat saling berkomunikasi melalui server dengan sistem broadcast. Server berjalan pada alamat IP 192.168.1.2 dengan port 5001, menandakan bahwa aplikasi ini dijalankan dalam jaringan lokal yang memungkinkan koneksi dari perangkat yang berbeda.
+
+Konfigurasi Server
+------------------
+
+Server dikonfigurasi untuk mendengarkan pada host 192.168.1.2 dan port 5001. Alamat IP ini berbeda dari localhost (127.0.0.1) yang biasanya digunakan untuk testing di komputer yang sama, menunjukkan bahwa server ini dirancang untuk menerima koneksi dari perangkat lain dalam jaringan yang sama. Server menggunakan socket TCP (SOCK_STREAM) untuk komunikasi yang reliable, dan mengimplementasikan sistem threading untuk menangani multiple client connection secara paralel.
+
+Server memiliki dua list global yaitu clients dan nicknames untuk mengelola semua koneksi client yang terhubung. Fungsi broadcast() digunakan untuk mengirim pesan dari satu client ke semua client lain yang terhubung, menciptakan efek chat room dimana semua peserta dapat melihat pesan dari peserta lainnya.
+
+Proses Koneksi Client
+---------------------
+
+Dari output terminal server, dapat dilihat bahwa dua client berhasil terhubung ke server. Client pertama terhubung dengan alamat IP 192.168.1.2 pada port lokal 52924 dengan username "user1 pc", sementara client kedua terhubung dengan alamat IP 192.168.1.3 pada port lokal 44762 dengan username "user2 hp". Port lokal yang berbeda (52924 dan 44762) menunjukkan bahwa setiap client menggunakan port ephemeral yang berbeda untuk koneksi outbound mereka ke server.
+
+Proses koneksi dimulai ketika server menerima koneksi baru melalui fungsi receive(). Server kemudian mengirim pesan 'NICK' ke client untuk meminta username. Client yang menerima pesan 'NICK' akan mengirim username yang telah diinput user. Server menyimpan username tersebut dalam list nicknames dan socket client dalam list clients. Setelah itu, server mem-broadcast pesan "{username} Bergabung!" ke semua client yang sudah terhubung, dan mengirim pesan konfirmasi "Terkoneksi dengan Server!" ke client yang baru saja terhubung.
+
+Server kemudian membuat thread terpisah untuk setiap client menggunakan fungsi handle() yang akan terus menerima pesan dari client tersebut dan mem-broadcast ke semua client lain. Threading ini memungkinkan server untuk melayani multiple client secara bersamaan tanpa blocking.
+
+Interaksi Chat yang Terjadi
+----------------------------
+
+Dari output terminal client (user1 pc), dapat dilihat urutan interaksi chat yang terjadi. Pertama, user memasukkan username "user1 pc" saat diminta oleh aplikasi. Setelah terhubung, client menerima pesan "user1 pc Bergabung!" yang merupakan broadcast dari server ketika user1 pc sendiri bergabung ke chat room. Kemudian client menerima pesan konfirmasi "Terkoneksi dengan Server!" yang dikirim langsung dari server ke client yang baru terhubung.
+
+Ketika user2 hp bergabung, user1 pc menerima pesan broadcast "user2 hp Bergabung!" yang memberitahu bahwa client lain telah bergabung ke chat room. Setelah itu, user2 hp mengirim pesan "halo user1 dari hp, kamu sudah terhubung" yang diterima oleh user1 pc dan ditampilkan di terminal.
+
+User1 pc kemudian mengirim pesan dengan mengetik di prompt ">>" dan pesan tersebut dikirim dengan format "user1 pc: halo user1 dari hp, kamu sudah terhubung". Menariknya, pesan ini juga muncul kembali di terminal user1 pc karena server mem-broadcast pesan tersebut ke semua client termasuk pengirimnya sendiri. Ini menunjukkan bahwa sistem broadcast mengirim pesan ke semua client tanpa filter, termasuk client yang mengirim pesan tersebut.
+
+User2 hp kemudian mengirim pesan koreksi "halo maaf, aku user2 hp, mungkin kamu salah sebut, haiii" yang diterima oleh user1 pc. Setelah itu, user2 hp mengirim pesan singkat "okookok" yang juga diterima oleh user1 pc. User1 pc kemudian mengirim pesan "okookok" yang juga di-broadcast kembali ke semua client.
+
+Fitur-Fitur yang Terlihat
+--------------------------
+
+Sistem broadcast messaging merupakan fitur utama yang terlihat dari output ini. Setiap pesan yang dikirim oleh client akan di-broadcast oleh server ke semua client yang terhubung, termasuk client yang mengirim pesan tersebut. Ini menciptakan efek chat room dimana semua peserta dapat melihat semua pesan yang dikirim oleh peserta lainnya.
+
+Join notifications juga terlihat jelas dalam output. Ketika client baru bergabung, server mem-broadcast pesan "{username} Bergabung!" ke semua client yang sudah terhubung, memberikan informasi real-time tentang siapa yang sedang online di chat room.
+
+Dual threading pada client memungkinkan komunikasi non-blocking. Client menggunakan dua thread terpisah yaitu receive_thread untuk menerima pesan dari server dan write_thread untuk mengirim pesan ke server. Ini memungkinkan client untuk terus menerima pesan sambil menunggu input dari user, menciptakan pengalaman chat yang lebih interaktif dan real-time.
+
+Format pesan menggunakan pola "{username}: {message}" yang membuat setiap pesan dapat diidentifikasi dengan jelas siapa pengirimnya. Username ditambahkan otomatis oleh client sebelum mengirim pesan, sehingga server tidak perlu menambahkan informasi pengirim lagi saat mem-broadcast.
+
+Kesimpulan
+----------
+
+Gambar ini menunjukkan aplikasi chat multi-client yang berfungsi dengan baik, dimana server berhasil menangani dua client secara bersamaan dengan sistem broadcast. Aplikasi ini mengimplementasikan konsep chat room sederhana dimana semua peserta dapat saling berkomunikasi melalui server. Penggunaan threading memungkinkan server untuk melayani multiple client secara paralel tanpa blocking, sementara dual threading pada client memungkinkan komunikasi dua arah yang non-blocking. Sistem ini cocok untuk implementasi chat room sederhana atau group chat dalam jaringan lokal.
+
