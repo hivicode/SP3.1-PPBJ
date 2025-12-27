@@ -12,7 +12,8 @@ Web server HTTP dengan template engine untuk dynamic content rendering menggunak
 - ✅ Persistent data storage (JSON)
 - ✅ Login/Signup functionality
 - ✅ Dynamic HTML rendering
-- ✅ Real-time form validation (client-side)
+- ✅ Form validation (client + server side)
+- ✅ Real-time password feedback
 
 ## Struktur File
 ```
@@ -97,11 +98,29 @@ else:
 
 ## Form Validation
 
-### Client-Side (JavaScript)
+### Client-Side Validation (JavaScript)
+
+**onsubmit validation:**
 ```javascript
 function validateForm() {
+  const username = document.getElementById('username').value;
+  const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
   
+  // Username validation
+  if (username.trim().length < 1) {
+    alert('⚠️ Username cannot be empty!');
+    return false;
+  }
+  
+  // Email format validation
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailPattern.test(email)) {
+    alert('⚠️ Please enter a valid email address!');
+    return false;
+  }
+  
+  // Password length validation
   if (password.length < 3) {
     alert('⚠️ Password must be at least 3 characters!');
     return false;
@@ -111,15 +130,56 @@ function validateForm() {
 }
 ```
 
-### Server-Side (Python Template)
+**Real-time feedback:**
+```javascript
+passwordInput.addEventListener('input', function() {
+  const length = this.value.length;
+  const small = this.parentElement.querySelector('small');
+  
+  if (length === 0) {
+    small.style.color = '#666';
+    small.textContent = 'Password must be at least 3 characters long';
+  } else if (length < 3) {
+    small.style.color = '#f44336';
+    small.textContent = `⚠️ ${length}/3 characters - ${3 - length} more needed`;
+  } else {
+    small.style.color = '#4CAF50';
+    small.textContent = `✓ Password length OK (${length} characters)`;
+  }
+});
+```
+
+### Server-Side Validation (Python Template)
 ```python
 {% 
-if len(password) < 3:
-    emit('<p>Password too short!</p>')
-elif not validate_email(email):
-    emit('<p>Invalid email format!</p>')
-else:
-    # Process registration
+def validate_email(email):
+    """Validasi format email dengan regex"""
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
+
+def register_user(username, email, password):
+    # Validasi username sudah digunakan
+    if username in users_db:
+        return False, "Username sudah digunakan"
+    
+    # Validasi email format
+    if not validate_email(email):
+        return False, "Format email tidak valid"
+    
+    # Validasi password length
+    if len(password) < 3:
+        return False, "Password minimal 3 karakter"
+    
+    # Simpan user baru
+    users_db[username] = {
+        'password': password,
+        'nama': username.title(),
+        'email': email
+    }
+    
+    if save_users(users_db):
+        return True, "Registrasi berhasil"
+    return False, "Gagal menyimpan data"
 %}
 ```
 
@@ -181,16 +241,24 @@ DOCUMENT_ROOT = 'htdocs/'
 
 ### 1. Login System
 - Login dengan username atau email
-- Password validation (min 3 karakter)
-- Real-time feedback saat input
-- Alert jika validation gagal
 - Server-side authentication
+- Dynamic redirect dengan user info
+- Error handling untuk invalid credentials
 
 ### 2. Signup System
-- Client-side validation (HTML5 + JS)
-- Email format validation (regex)
-- Username uniqueness check
-- Data persistent ke JSON file
+- **Client-side validation:**
+  - HTML5 validation (required, minlength)
+  - JavaScript validation (username, email format, password)
+  - Real-time password feedback
+  - Alert untuk setiap error
+  - Form submission blocking jika invalid
+  
+- **Server-side validation:**
+  - Username uniqueness check
+  - Email format validation (regex)
+  - Password length check (min 3)
+  - Data persistent ke JSON file
+  - Error messages untuk setiap validation failure
 
 ### 3. Dashboard
 - Display user info dari URL parameter
@@ -225,6 +293,8 @@ DOCUMENT_ROOT = 'htdocs/'
 | Server-side Logic | ❌ | ✅ |
 | Database | ❌ | ✅ (JSON) |
 | Authentication | Client-side | Server-side |
+| Form Validation | ❌ | Client + Server |
+| Real-time Feedback | ❌ | ✅ |
 | Dynamic Rendering | ❌ | ✅ |
 
 ## Learning Objectives
