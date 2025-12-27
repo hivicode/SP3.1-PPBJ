@@ -1,0 +1,12 @@
+{
+  "admin": {
+    "password": "123",
+    "nama": "Admin",
+    "email": "admin@gmail.com"
+  },
+  "dzaky": {
+    "password": "dzaky123",
+    "nama": "Dzaky",
+    "email": "dzaky@gmail.com"
+  }
+}

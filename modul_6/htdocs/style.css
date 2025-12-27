@@ -1212,3 +1212,38 @@ body.dashboard-body {
   width: 100%;
   margin-top: 12px;
 }
+
+/* =====================
+   AUTH STATUS STYLES
+===================== */
+
+.status-error .login-title {
+  color: #e53935;
+}
+
+.status-success .login-title {
+  color: #2e7d32;
+}
+
+.status-box {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Button secondary (abu-abu rapi) */
+.btn-secondary {
+  background: #6c757d;
+}
+
+.btn-secondary:hover {
+  box-shadow: 0 8px 24px rgba(108, 117, 125, 0.35);
+}
+
+/* Button group */
+.auth-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+

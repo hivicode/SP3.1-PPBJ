@@ -55,7 +55,7 @@
             Settings
           </a>
           <div class="profile-divider"></div>
-          <a href="#" onclick="logout()" class="profile-link logout-link">
+          <a href="login.html" class="profile-link logout-link">
             <span class="material-symbols-outlined">logout</span>
             Logout
           </a>
@@ -198,9 +198,36 @@
     </main>
   </div>
 
-<script src="auth.js"></script>
 <script>
-  checkLogin();
+  // Get user info from URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const userName = urlParams.get('name') || 'User';
+  const userUsername = urlParams.get('user') || '';
+  
+  // Update profile info if elements exist
+  document.addEventListener('DOMContentLoaded', function() {
+    // Update nama di profile
+    const profileName = document.querySelector('.profile-details h4');
+    if (profileName && userName !== 'User') {
+      profileName.textContent = userName.replace('+', ' ');
+    }
+    
+    // Update email/username di profile  
+    const profileEmail = document.querySelector('.profile-details p');
+    if (profileEmail && userUsername) {
+      profileEmail.textContent = userUsername;
+    }
+    
+    // Update avatar initials
+    const avatars = document.querySelectorAll('.user-avatar, .profile-avatar');
+    if (userName !== 'User') {
+      const initials = userName.split('+').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+      avatars.forEach(avatar => {
+        avatar.textContent = initials;
+      });
+    }
+  });
+
 
   function toggleProfileMenu() {
     const dropdown = document.getElementById('profileDropdown');

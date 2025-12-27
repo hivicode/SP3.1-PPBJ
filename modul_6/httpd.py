@@ -7,7 +7,6 @@ from template import Template
 
 SERVER_HOST = '127.0.0.5'
 SERVER_PORT = 722
-# Make DOCUMENT_ROOT relative to this script's location
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DOCUMENT_ROOT = os.path.join(SCRIPT_DIR, 'htdocs')
 
@@ -45,9 +44,7 @@ def handle_request(request):
     uri = words[1]
     http_version = words[2]
     
-    # Remove query string and fragment if present
     uri = uri.split('?')[0].split('#')[0]
-    # Remove leading slash and decode URL encoding
     uri = unquote(uri.lstrip("/"))
 
     if uri == "":
@@ -65,10 +62,8 @@ def handle_request(request):
 
 def handle_get(uri, http_version):
     filepath = os.path.join(DOCUMENT_ROOT, uri)
-    # Normalize path to prevent directory traversal and handle path separators
     filepath = os.path.normpath(filepath)
     
-    # Security: Ensure the resolved path is still within DOCUMENT_ROOT
     if not filepath.startswith(os.path.normpath(DOCUMENT_ROOT)):
         message_body = b"<h1>403 Forbidden</h1>"
         response_line = f"{http_version} 403 Forbidden".encode()
@@ -100,10 +95,8 @@ def handle_get(uri, http_version):
 
 def handle_post(uri, http_version, data):
     filepath = os.path.join(DOCUMENT_ROOT, uri)
-    # Normalize path to prevent directory traversal and handle path separators
     filepath = os.path.normpath(filepath)
     
-    # Security: Ensure the resolved path is still within DOCUMENT_ROOT
     if not filepath.startswith(os.path.normpath(DOCUMENT_ROOT)):
         message_body = b"<h1>403 Forbidden</h1>"
         response_line = f"{http_version} 403 Forbidden".encode()
@@ -112,7 +105,7 @@ def handle_post(uri, http_version, data):
         return b"".join([response_line, crlf, entity_header, crlf, crlf, message_body])
 
     if os.path.exists(filepath) and not os.path.isdir(filepath):
-        with open(filepath, 'r') as file:
+        with open(filepath, 'r', encoding='utf-8') as file:
             html = file.read()
 
         _POST = {}

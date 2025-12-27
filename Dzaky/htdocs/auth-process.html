@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Processing - Dzaky Wallet</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="root">
+      <nav class="navbar">
+        <div class="navbar-logo">
+          <span class="wallet-text">Dzaky Wallet</span>
+        </div>
+      </nav>
+
+      <section class="login-section">
+        <div class="login-container">
+{% 
+from urllib.parse import unquote
+import json
+import re
+import os
+
+DB_FILE = 'Dzaky/users_db.json'
+
+def load_users():
+    default_users = {
+        'admin': {
+            'password': '123',
+            'nama': 'Administrator',
+            'email': 'admin@dzaky.com'
+        }
+    }
+    try:
+        if os.path.exists(DB_FILE):
+            with open(DB_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        else:
+            save_users(default_users)
+            return default_users
+    except:
+        return default_users
+
+def save_users(users_data):
+    try:
+        os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
+        with open(DB_FILE, 'w', encoding='utf-8') as f:
+            json.dump(users_data, f, indent=2, ensure_ascii=False)
+        return True
+    except:
+        return False
+
+users_db = load_users()
+
+def validate_email(email):
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
+
+def authenticate(username_or_email, password):
+    if username_or_email in users_db:
+        if users_db[username_or_email]['password'] == password:
+            return True, users_db[username_or_email]
+    
+    for username, user_data in users_db.items():
+        if user_data.get('email', '').lower() == username_or_email.lower():
+            if user_data['password'] == password:
+                return True, user_data
+    
+    return False, None
+
+def register_user(username, email, password):
+    if username in users_db:
+        return False, "Username sudah digunakan"
+    if not validate_email(email):
+        return False, "Format email tidak valid"
+    if len(password) < 3:
+        return False, "Password minimal 3 karakter"
+
+    users_db[username] = {
+        'password': password,
+        'nama': username.title(),
+        'email': email
+    }
+
+    if save_users(users_db):
+        return True, "Registrasi berhasil"
+    return False, "Gagal menyimpan data"
+
+if '_POST' in dir() and _POST:
+    action = unquote(_POST.get('action', ''))
+    username = unquote(_POST.get('username', ''))
+    password = unquote(_POST.get('password', ''))
+
+    if action == 'login':
+        is_valid, user_data = authenticate(username, password)
+        if is_valid:
+            nama_encoded = user_data['nama'].replace(' ', '+')
+            redirect_url = f'dashboard.html?user={username}&name={nama_encoded}'
+            
+            emit('<h1 class="login-title">Masuk Berhasil</h1>')
+            emit('<p class="login-subtitle">Selamat datang, ', user_data['nama'], '!</p>')
+            emit('<div class="result-box" style="margin-top:24px">')
+            emit('<div class="login-submit" style="pointer-events:none;opacity:.85">Mengalihkan ke dashboard…</div>')
+            emit('</div>')  
+            emit('<meta http-equiv="refresh" content="3;url=', redirect_url, '">')
+        else:
+            emit('<h1 class="login-title">Gagal Masuk</h1>')
+            emit('<p class="login-subtitle">Username atau kata sandi salah</p>')
+            emit('<button onclick="window.location.href=\'login.html\'" class="login-submit">Coba Lagi</button>')
+            emit('<button onclick="window.location.href=\'signup.html\'" class="login-submit outline">Daftar</button>')
+
+    elif action == 'signup':
+        email = unquote(_POST.get('email', ''))
+        success, message = register_user(username, email, password)
+
+        if success:
+            emit('<h1 class="login-title">Registrasi Berhasil</h1>')
+            emit('<p class="login-subtitle">Silakan masuk menggunakan akun Anda</p>')
+            emit('<button onclick="window.location.href=\'login.html\'" class="login-submit">Masuk</button>')
+            emit('<button onclick="window.location.href=\'index.html\'" class="login-submit outline">Ke Beranda</button>')
+        else:
+            emit('<h1 class="login-title">Registrasi Gagal</h1>')
+            emit('<p class="login-subtitle">', message, '</p>')
+            emit('<button onclick="window.location.href=\'signup.html\'" class="login-submit">Coba Lagi</button>')
+            emit('<button onclick="window.location.href=\'login.html\'" class="login-submit outline">Masuk</button>')
+            
+    else:
+        emit('<h1 class="login-title">Akses Tidak Valid</h1>')
+        emit('<p class="login-subtitle">Silakan gunakan formulir login atau daftar</p>')
+        emit('<button onclick="window.location.href=\'login.html\'" class="login-submit">Login</button>')
+        emit('<button onclick="window.location.href=\'signup.html\'" class="login-submit outline">Daftar</button>')
+
+else:
+    emit('<h1 class="login-title">Akses Tidak Valid</h1>')
+    emit('<p class="login-subtitle">Silakan gunakan formulir login atau daftar</p>')
+    emit('<button onclick="window.location.href=\'login.html\'" class="login-submit">Login</button>')
+    emit('<button onclick="window.location.href=\'signup.html\'" class="login-submit outline">Daftar</button>')
+%}
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

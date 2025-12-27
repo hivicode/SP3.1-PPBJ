@@ -10,7 +10,6 @@ class Template:
         tokens = []
 
         for index, token in enumerate(self.delimiter.split(text)):
-            # HTML biasa
             if index % 2 == 0:
                 if token:
                     tokens.append((
@@ -18,7 +17,6 @@ class Template:
                         token.replace('%\\}', '%}')
                              .replace('{\\%', '{%}')
                     ))
-            # Kode Python di dalam {% %}
             else:
                 lines = token.replace('{\\%', '{%}') \
                              .replace('%\\}', '%}') \

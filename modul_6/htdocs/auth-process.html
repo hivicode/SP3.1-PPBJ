@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Processing · Phoning</title>
+
+  <!-- Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+  />
+
+  <!-- Font -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500&display=swap"
+  />
+
+  <!-- Material Symbols -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+  />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="login-body">
+
+  <!-- Simple Navbar -->
+  <nav class="navbar login-navbar">
+    <div class="logo-container">
+      <img
+        class="logo-img"
+        src="https://api.builder.io/api/v1/image/assets/TEMP/88ae49d6ac3aea10d5fc2fd10a544b233d5bedc1?width=72"
+        alt="Phoning Logo"
+      />
+      <a href="index.html" class="logo-text">Phoning</a>
+    </div>
+    
+    <a href="index.html" class="back-btn">
+      <span class="material-symbols-outlined">arrow_back</span>
+      Back
+    </a>
+  </nav>
+
+  <!-- Processing Section -->
+  <section class="login-section">
+    <div class="login-card">
+      {% 
+from urllib.parse import unquote
+import json
+import re
+import os
+
+# Path untuk file database sederhana
+DB_FILE = 'modul_6/users_db.json'
+
+def load_users():
+    """Load users dari file JSON"""
+    default_users = {
+        '722@dor.com': {
+            'password': 'banheesoo',
+            'nama': 'Ban Heesoo',
+            'email': '722@dor.com'
+        }
+    }
+    
+    try:
+        if os.path.exists(DB_FILE):
+            with open(DB_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        else:
+            # Buat file baru dengan user default
+            save_users(default_users)
+            return default_users
+    except Exception as e:
+        return default_users
+
+def save_users(users_data):
+    """Simpan users ke file JSON"""
+    try:
+        os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
+        with open(DB_FILE, 'w', encoding='utf-8') as f:
+            json.dump(users_data, f, indent=2, ensure_ascii=False)
+        return True
+    except Exception as e:
+        return False
+
+# Load database
+users_db = load_users()
+
+def validate_email(email):
+    """Validasi format email"""
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
+
+def authenticate(username_or_email, password):
+    """Validasi login - bisa pakai username atau email"""
+    # Cek langsung sebagai username
+    if username_or_email in users_db:
+        if users_db[username_or_email]['password'] == password:
+            return True, users_db[username_or_email]
+    
+    # Jika tidak ketemu, cari berdasarkan email
+    for username, user_data in users_db.items():
+        if user_data.get('email', '').lower() == username_or_email.lower():
+            if user_data['password'] == password:
+                return True, user_data
+    
+    return False, None
+
+def register_user(username, email, password):
+    if username in users_db:
+        return False, "Username sudah digunakan"
+    if not validate_email(email):
+        return False, "Format email tidak valid"
+    if len(password) < 3:
+        return False, "Password minimal 3 karakter"
+
+    users_db[username] = {
+        'password': password,
+        'nama': username.title(),
+        'email': email
+    }
+
+    if save_users(users_db):
+        return True, "Registrasi berhasil"
+    return False, "Gagal menyimpan data"
+
+# ==================== PROSES REQUEST ====================
+if '_POST' in dir() and _POST:
+    action = unquote(_POST.get('action', ''))
+    username = unquote(_POST.get('username', ''))
+    password = unquote(_POST.get('password', ''))
+
+    # ---------- LOGIN ----------
+    if action == 'login':
+        is_valid, user_data = authenticate(username, password)
+        if is_valid:
+            nama_encoded = user_data['nama'].replace(' ', '+')
+            redirect_url = f'dashboard.html?user={username}&name={nama_encoded}'
+            
+            emit('<h1 class="login-title">Login Successful!</h1>')
+            emit('<p class="login-subtitle">Welcome back, ', user_data['nama'], '!</p>')
+            emit('<div style="margin-top:24px">')
+            emit('<div class="login-submit" style="pointer-events:none;opacity:.85">Redirecting to dashboard...</div>')
+            emit('</div>')
+            emit('<meta http-equiv="refresh" content="2;url=', redirect_url, '">')
+        else:
+            emit('<h1 class="login-title" style="color: #f44336;">Login Failed</h1>')
+            emit('<p class="login-subtitle">Username or password is incorrect</p>')
+            emit('<button onclick="window.location.href=\'login.html\'" class="login-submit">Try Again</button>')
+            emit('<button onclick="window.location.href=\'signup.html\'" class="login-submit" style="background:#6c757d;margin-top:10px">Sign Up</button>')
+
+    # ---------- SIGNUP ----------
+    elif action == 'signup':
+        email = unquote(_POST.get('email', ''))
+        success, message = register_user(username, email, password)
+
+        if success:
+            emit('<h1 class="login-title" style="color: #4CAF50;">Registration Successful!</h1>')
+            emit('<p class="login-subtitle">Your account has been created</p>')
+            emit('<div style="margin-top:20px;padding:20px;background:#e8f5e9;border-radius:8px;">')
+            emit('<p style="margin:5px 0;"><strong>Username:</strong> ', username, '</p>')
+            emit('<p style="margin:5px 0;"><strong>Email:</strong> ', email, '</p>')
+            emit('</div>')
+            emit('<button onclick="window.location.href=\'login.html\'" class="login-submit" style="margin-top:20px">Login Now</button>')
+        else:
+            emit('<div class="status-box status-error">')
+            emit('<h1 class="login-title">Registration Failed</h1>')
+            emit('<p class="login-subtitle">Password minimal 3 karakter</p>')
+            emit('<div class="auth-actions">')
+            emit('<button onclick="window.location.href=\'signup.html\'" class="login-submit">Try Again</button>')
+            emit('<button onclick="window.location.href=\'login.html\'" class="login-submit btn-secondary">Login</button>')
+            emit('</div>')
+            emit('</div>')
+            
+
+    # ---------- INVALID ----------
+    else:
+        emit('<h1 class="login-title">Invalid Access</h1>')
+        emit('<p class="login-subtitle">Please use the login or signup form</p>')
+        emit('<button onclick="window.location.href=\'login.html\'" class="login-submit">Login</button>')
+        emit('<button onclick="window.location.href=\'signup.html\'" class="login-submit" style="background:#6c757d;margin-top:10px">Sign Up</button>')
+
+else:
+    emit('<h1 class="login-title">Invalid Access</h1>')
+    emit('<p class="login-subtitle">Please use the login or signup form</p>')
+    emit('<button onclick="window.location.href=\'login.html\'" class="login-submit">Login</button>')
+    emit('<button onclick="window.location.href=\'signup.html\'" class="login-submit" style="background:#6c757d;margin-top:10px">Sign Up</button>')
+%}
+    </div>
+  </section>
+
+</body>
+</html>
+

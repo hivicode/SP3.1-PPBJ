@@ -27,16 +27,16 @@
             Silakan masukkan detail Anda untuk masuk
           </p>
 
-          <div id="error-message" class="error-message"></div>
 
-          <form class="login-form" onsubmit="login(event)">
+          <form class="login-form" method="POST" action="auth-process.html">
+            <input type="hidden" name="action" value="login" />
+            
             <div class="input-group">
-              <label>Email</label>
+              <label>Username atau Email</label>
               <input
                 type="text"
-                id="username"
+                name="username"
                 placeholder="admin"
-                value="admin"
                 required
               />
             </div>
@@ -45,9 +45,8 @@
               <label>Kata Sandi</label>
               <input
                 type="password"
-                id="password"
+                name="password"
                 placeholder="123"
-                value="123"
                 required
               />
             </div>
@@ -68,6 +67,5 @@
       </section>
     </div>
 
-    <script src="auth.js"></script>
   </body>
 </html>

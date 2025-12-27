@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dasbor – Wallet</title>
+    <title>Dasbor – Dzaky Wallet</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
@@ -14,6 +14,7 @@
 
   <body>
     <div class="dashboard-root">
+      <!-- SIDEBAR -->
       <aside class="sidebar">
         <div class="sidebar-logo">Dzaky Wallet</div>
 
@@ -25,11 +26,15 @@
         </nav>
       </aside>
 
+      <!-- MAIN -->
       <main class="dashboard-main">
+        <!-- TOPBAR -->
         <div class="dashboard-topbar">
-          <h1 class="dashboard-title">Dasbor</h1>
-          <a href="#" onclick="logout(); return false;" class="login-btn">Keluar</a>
+          <h1 class="dashboard-title" id="welcome-title">Dasbor</h1>
+          <a href="login.html" class="logout-btn">Keluar</a>
         </div>
+
+        <!-- STATS -->
         <section class="stats-grid">
           <div class="stat-card">
             <p class="stat-label">Saldo</p>
@@ -47,28 +52,30 @@
           </div>
         </section>
 
+        <!-- SUMMARY -->
         <section class="summary-grid">
-            <div class="summary-card accent">
+          <div class="summary-card accent">
             <p>Total Saldo</p>
             <h2>Rp 12.430.000</h2>
-            </div>
-        
-            <div class="summary-card">
+          </div>
+
+          <div class="summary-card">
             <p>Pemasukan Bulanan</p>
             <h2>Rp 3.200.000</h2>
-            </div>
-        
-            <div class="summary-card">
+          </div>
+
+          <div class="summary-card">
             <p>Pengeluaran Bulanan</p>
             <h2>Rp 1.540.000</h2>
-            </div>
-        
-            <div class="summary-card">
+          </div>
+
+          <div class="summary-card">
             <p>Transaksi</p>
             <h2>128</h2>
-            </div>
+          </div>
         </section>
 
+        <!-- CONTENT -->
         <section class="dashboard-content">
           <div class="content-card">
             <h3>Aktivitas Terbaru</h3>
@@ -81,24 +88,27 @@
           </div>
         </section>
 
+        <!-- CHART -->
         <section class="chart-grid">
-            <div class="chart-card">
+          <div class="chart-card">
             <h3>Grafik Area</h3>
             <div class="chart-placeholder"></div>
-            </div>
-        
-            <div class="chart-card">
+          </div>
+
+          <div class="chart-card">
             <h3>Grafik Batang</h3>
             <div class="chart-placeholder"></div>
-            </div>
+          </div>
         </section>
-  
       </main>
     </div>
 
-    <script src="auth.js"></script>
     <script>
-      checkLogin();
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get("name") || "User";
+
+      const title = document.getElementById("welcome-title");
+      title.textContent = `Selamat Datang, ${name}`;
     </script>
   </body>
 </html>
