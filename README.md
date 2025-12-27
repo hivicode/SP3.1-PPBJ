@@ -39,7 +39,7 @@ Web aplikasi lengkap "Dzaky Wallet" dengan authentication system, template engin
 | **POST Method** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
 | **Authentication** | ❌ | ❌ | ❌ | ❌ | Client | Server | Server |
 | **Database** | ❌ | ❌ | ❌ | ❌ | ❌ | JSON | JSON |
-| **Form Validation** | ❌ | ❌ | ❌ | ❌ | ❌ | Client | Client+Server |
+| **Form Validation** | ❌ | ❌ | ❌ | ❌ | ❌ | Client+Server | Client+Server |
 | **Dynamic Rendering** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
 
 ## Quick Start
