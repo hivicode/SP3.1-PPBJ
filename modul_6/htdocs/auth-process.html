@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Processing · Phoning</title>
+  <title>Processing Â· Phoning</title>
 
   <!-- Icons -->
   <link
@@ -54,11 +54,11 @@ import json
 import re
 import os
 
-# Path untuk file database sederhana
+# Database file path
 DB_FILE = 'modul_6/users_db.json'
 
 def load_users():
-    """Load users dari file JSON"""
+    """Load users from JSON file"""
     default_users = {
         '722@dor.com': {
             'password': 'banheesoo',
@@ -72,14 +72,14 @@ def load_users():
             with open(DB_FILE, 'r', encoding='utf-8') as f:
                 return json.load(f)
         else:
-            # Buat file baru dengan user default
+            # Create new file with default user
             save_users(default_users)
             return default_users
     except Exception as e:
         return default_users
 
 def save_users(users_data):
-    """Simpan users ke file JSON"""
+    """Save users to JSON file"""
     try:
         os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
         with open(DB_FILE, 'w', encoding='utf-8') as f:
@@ -88,22 +88,22 @@ def save_users(users_data):
     except Exception as e:
         return False
 
-# Load database
+# Load users database
 users_db = load_users()
 
 def validate_email(email):
-    """Validasi format email"""
+    """Validate email format"""
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return re.match(pattern, email) is not None
 
 def authenticate(username_or_email, password):
-    """Validasi login - bisa pakai username atau email"""
-    # Cek langsung sebagai username
+    """Validate login with username or email"""
+    # Check directly as username
     if username_or_email in users_db:
         if users_db[username_or_email]['password'] == password:
             return True, users_db[username_or_email]
     
-    # Jika tidak ketemu, cari berdasarkan email
+    # If not found, search by email
     for username, user_data in users_db.items():
         if user_data.get('email', '').lower() == username_or_email.lower():
             if user_data['password'] == password:
@@ -113,11 +113,11 @@ def authenticate(username_or_email, password):
 
 def register_user(username, email, password):
     if username in users_db:
-        return False, "Username sudah digunakan"
+        return False, "Username already taken"
     if not validate_email(email):
-        return False, "Format email tidak valid"
+        return False, "Invalid email format"
     if len(password) < 3:
-        return False, "Password minimal 3 karakter"
+        return False, "Password must be at least 3 characters"
 
     users_db[username] = {
         'password': password,
@@ -126,10 +126,10 @@ def register_user(username, email, password):
     }
 
     if save_users(users_db):
-        return True, "Registrasi berhasil"
-    return False, "Gagal menyimpan data"
+        return True, "Registration successful"
+    return False, "Failed to save data"
 
-# ==================== PROSES REQUEST ====================
+# ==================== PROCESS REQUEST ====================
 if '_POST' in dir() and _POST:
     action = unquote(_POST.get('action', ''))
     username = unquote(_POST.get('username', ''))
@@ -170,7 +170,7 @@ if '_POST' in dir() and _POST:
         else:
             emit('<div class="status-box status-error">')
             emit('<h1 class="login-title">Registration Failed</h1>')
-            emit('<p class="login-subtitle">Password minimal 3 karakter</p>')
+            emit('<p class="login-subtitle">Password must be at least 3 characters</p>')
             emit('<div class="auth-actions">')
             emit('<button onclick="window.location.href=\'signup.html\'" class="login-submit">Try Again</button>')
             emit('<button onclick="window.location.href=\'login.html\'" class="login-submit btn-secondary">Login</button>')
@@ -196,4 +196,5 @@ else:
 
 </body>
 </html>
+
 
