@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard · Phoning</title>
+
+  <!-- Material Symbols -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+  />
+
+  <!-- Font -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500&display=swap"
+  />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dashboard-body">
+
+  <!-- Topbar -->
+  <header class="dashboard-topbar">
+    <div class="logo-container">
+      <img
+        class="logo-img"
+        src="https://api.builder.io/api/v1/image/assets/TEMP/88ae49d6ac3aea10d5fc2fd10a544b233d5bedc1?width=72"
+        alt="Phoning Logo"
+      />
+      <div class="logo-text">Phoning</div>
+    </div>
+
+    <div class="topbar-actions">
+      <span class="material-symbols-outlined">notifications</span>
+      <div class="user-profile">
+        <div class="user-avatar" onclick="toggleProfileMenu()">BI</div>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-info">
+            <div class="profile-avatar">BI</div>
+            <div class="profile-details">
+              <h4>Bintang</h4>
+              <p>722@dor.com</p>
+            </div>
+          </div>
+          <div class="profile-divider"></div>
+          <a href="#" class="profile-link">
+            <span class="material-symbols-outlined">person</span>
+            Profile
+          </a>
+          <a href="#" class="profile-link">
+            <span class="material-symbols-outlined">settings</span>
+            Settings
+          </a>
+          <div class="profile-divider"></div>
+          <a href="#" onclick="logout()" class="profile-link logout-link">
+            <span class="material-symbols-outlined">logout</span>
+            Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-layout">
+
+  <!-- Sidebar -->
+    <aside class="dashboard-sidebar">
+
+      <div class="sidebar-menu">
+        <a class="sidebar-link active">
+          <span class="material-symbols-outlined">dashboard</span>
+          Dashboard
+        </a>
+        <a class="sidebar-link">
+          <span class="material-symbols-outlined">group</span>
+          Members
+        </a>
+        <a class="sidebar-link">
+          <span class="material-symbols-outlined">chat</span>
+          Messages
+        </a>
+        <a class="sidebar-link">
+          <span class="material-symbols-outlined">calendar_month</span>
+          Calendar
+        </a>
+        <a class="sidebar-link">
+          <span class="material-symbols-outlined">settings</span>
+          Settings
+        </a>
+      </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="dashboard-content">
+
+      <!-- Page title -->
+      <div class="dashboard-header">
+        <h1>Dashboard</h1>
+        <button class="dashboard-btn">New Post</button>
+      </div>
+
+      <!-- Stats -->
+      <section class="dashboard-stats">
+        <div class="stat-card">
+          <p class="stat-label">Active Members</p>
+          <h2>12,430</h2>
+        </div>
+
+        <div class="stat-card">
+          <p class="stat-label">Messages</p>
+          <h2>3,210</h2>
+        </div>
+
+        <div class="stat-card">
+          <p class="stat-label">Live Sessions</p>
+          <h2>48</h2>
+        </div>
+
+        <div class="stat-card accent">
+          <p class="stat-label">Growth</p>
+          <h2>+18%</h2>
+        </div>
+      </section>
+
+      <!-- Table -->
+      <section class="dashboard-table">
+        <h3>Recent Activities</h3>
+
+        <div class="dashboard-table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Action</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Bintang</td>
+                <td>Joined Live</td>
+                <td>Just now</td>
+                <td><span class="badge success">Success</span></td>
+              </tr>
+              <tr>
+                <td>Minji</td>
+                <td>Sent Message</td>
+                <td>Today</td>
+                <td><span class="badge success">Success</span></td>
+              </tr>
+              <tr>
+                <td>Hanni</td>
+                <td>Posted Photo</td>
+                <td>Today</td>
+                <td><span class="badge success">Success</span></td>
+              </tr>
+              <tr>
+                <td>Danielle</td>
+                <td>Updated Profile</td>
+                <td>Yesterday</td>
+                <td><span class="badge pending">Pending</span></td>
+              </tr>
+              <tr>
+                <td>Haerin</td>
+                <td>Joined Live</td>
+                <td>Yesterday</td>
+                <td><span class="badge success">Success</span></td>
+              </tr>
+              <tr>
+                <td>Hyein</td>
+                <td>Posted Video</td>
+                <td>2 days ago</td>
+                <td><span class="badge success">Success</span></td>
+              </tr>
+              <tr>
+                <td>Bintang</td>
+                <td>Updated Calendar</td>
+                <td>2 days ago</td>
+                <td><span class="badge success">Success</span></td>
+              </tr>
+              <tr>
+                <td>Minji</td>
+                <td>Sent Message</td>
+                <td>3 days ago</td>
+                <td><span class="badge pending">Pending</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+<script src="auth.js"></script>
+<script>
+  checkLogin();
+
+  function toggleProfileMenu() {
+    const dropdown = document.getElementById('profileDropdown');
+    dropdown.classList.toggle('active');
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('profileDropdown');
+    const userProfile = document.querySelector('.user-profile');
+    
+    if (!userProfile.contains(event.target)) {
+      dropdown.classList.remove('active');
+    }
+  });
+</script>
+</body>
+</html>

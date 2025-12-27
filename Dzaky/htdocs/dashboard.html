@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dasbor – Wallet</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-root">
+      <aside class="sidebar">
+        <div class="sidebar-logo">Dzaky Wallet</div>
+
+        <nav class="sidebar-menu">
+          <a class="active">Dasbor</a>
+          <a>Transaksi</a>
+          <a>Analitik</a>
+          <a>Pengaturan</a>
+        </nav>
+      </aside>
+
+      <main class="dashboard-main">
+        <div class="dashboard-topbar">
+          <h1 class="dashboard-title">Dasbor</h1>
+          <a href="#" onclick="logout(); return false;" class="login-btn">Keluar</a>
+        </div>
+        <section class="stats-grid">
+          <div class="stat-card">
+            <p class="stat-label">Saldo</p>
+            <h2 class="stat-value">Rp 12.430.000</h2>
+          </div>
+
+          <div class="stat-card">
+            <p class="stat-label">Pemasukan</p>
+            <h2 class="stat-value">Rp 3.200.000</h2>
+          </div>
+
+          <div class="stat-card">
+            <p class="stat-label">Pengeluaran</p>
+            <h2 class="stat-value">Rp 1.540.000</h2>
+          </div>
+        </section>
+
+        <section class="summary-grid">
+            <div class="summary-card accent">
+            <p>Total Saldo</p>
+            <h2>Rp 12.430.000</h2>
+            </div>
+        
+            <div class="summary-card">
+            <p>Pemasukan Bulanan</p>
+            <h2>Rp 3.200.000</h2>
+            </div>
+        
+            <div class="summary-card">
+            <p>Pengeluaran Bulanan</p>
+            <h2>Rp 1.540.000</h2>
+            </div>
+        
+            <div class="summary-card">
+            <p>Transaksi</p>
+            <h2>128</h2>
+            </div>
+        </section>
+
+        <section class="dashboard-content">
+          <div class="content-card">
+            <h3>Aktivitas Terbaru</h3>
+            <p>Belum ada aktivitas terbaru.</p>
+          </div>
+
+          <div class="content-card">
+            <h3>Analitik</h3>
+            <p>Data analitik akan muncul di sini.</p>
+          </div>
+        </section>
+
+        <section class="chart-grid">
+            <div class="chart-card">
+            <h3>Grafik Area</h3>
+            <div class="chart-placeholder"></div>
+            </div>
+        
+            <div class="chart-card">
+            <h3>Grafik Batang</h3>
+            <div class="chart-placeholder"></div>
+            </div>
+        </section>
+  
+      </main>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+      checkLogin();
+    </script>
+  </body>
+</html>

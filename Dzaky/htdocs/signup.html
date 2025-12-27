@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar – Wallet</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="root">
+      <nav class="navbar">
+        <div class="navbar-logo">
+          <span class="wallet-text">Dzaky Wallet</span>
+        </div>
+
+      </nav>
+      <section class="login-section">
+        <div class="login-container">
+          <h1 class="login-title">Daftar Akun</h1>
+          <p class="login-subtitle">
+            Silakan masukkan detail Anda untuk daftar
+          </p>
+
+          <div id="error-message" class="error-message"></div>
+
+          <form class="login-form" onsubmit="signup(event)">
+            <div class="input-group">
+              <label>Username</label>
+              <input
+                type="text"
+                id="username"
+                placeholder="username"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Email</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="contoh@mail.com"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Kata Sandi</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="kata sandi"
+                required
+              />
+            </div>
+
+            <button type="submit" class="login-submit">
+              Daftar
+            </button>
+            <button type="button" onclick="window.location.href='index.html'" class="login-submit outline">
+              Kembali ke Beranda
+            </button>
+          </form>
+
+          <p class="login-footer">
+            Sudah punya akun?
+            <a href="login.html">Masuk</a>
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <script src="auth.js"></script>
+  </body>
+</html>
