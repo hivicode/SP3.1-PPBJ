@@ -168,14 +168,10 @@ if '_POST' in dir() and _POST:
             emit('</div>')
             emit('<button onclick="window.location.href=\'login.html\'" class="login-submit" style="margin-top:20px">Login Now</button>')
         else:
-            emit('<div class="status-box status-error">')
-            emit('<h1 class="login-title">Registration Failed</h1>')
-            emit('<p class="login-subtitle">Password must be at least 3 characters</p>')
-            emit('<div class="auth-actions">')
-            emit('<button onclick="window.location.href=\'signup.html\'" class="login-submit">Try Again</button>')
-            emit('<button onclick="window.location.href=\'login.html\'" class="login-submit btn-secondary">Login</button>')
-            emit('</div>')
-            emit('</div>')
+            emit('<h1 class="login-title" style="color: #f44336;">Registration Failed</h1>')
+            emit('<p class="login-subtitle">', message, '</p>')
+            emit('<button onclick="window.location.href=\\'signup.html\\'" class="login-submit">Try Again</button>')
+            emit('<button onclick="window.location.href=\\'login.html\\'" class="login-submit" style="background:#6c757d;margin-top:10px">Login</button>')
             
 
     # ---------- INVALID ----------
@@ -196,5 +192,6 @@ else:
 
 </body>
 </html>
+
 
 
